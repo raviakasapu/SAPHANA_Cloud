@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="UTF-8"/>
+    <title>Library</title>  
+    <script id='sap-ui-bootstrap'
+        src='/sap/ui5/1/resources/sap-ui-core.js'  
+        data-sap-ui-theme='sap_goldreflection'  
+        data-sap-ui-libs='sap.ui.core,sap.ui.commons,sap.ui.table'>
+    </script>
+
+
+    <script language="JavaScript">
+        var aData;
+        $.ajax
+        ({
+          type: "GET",
+          url: "/codejam_package/services/library.xsodata/library/?$format=json",
+          dataType: 'json',
+          async: false,
+          success: function (data, status){
+        	  aData = data.d.results;
+          }
+        });
+        //Create an instance of the table control
+        var oTable = new sap.ui.table.Table({
+        	title: "My Library",
+        	visibleRowCount: 7,
+        	firstVisibleRow: 3,
+        	selectionMode: sap.ui.table.SelectionMode.Single
+        });
+
+        //Define the columns and the control templates to be used
+        var oColumn = new sap.ui.table.Column({
+        	label: new sap.ui.commons.Label({text: "Category"}),
+        	template: new sap.ui.commons.TextView().bindProperty("text", "CATEGORY"),
+        	sortProperty: "CATEGORY",
+        	filterProperty: "CATEGORY",
+        	width: "100px"
+        });
+        oTable.addColumn(oColumn);
+
+        //Define the columns and the control templates to be used
+        var oColumn = new sap.ui.table.Column({
+        	label: new sap.ui.commons.Label({text: "Name"}),
+        	template: new sap.ui.commons.TextView().bindProperty("text", "BOOKNAME"),
+        	sortProperty: "BOOKNAME",
+        	filterProperty: "BOOKNAME",
+        	width: "100px"
+        });
+        oTable.addColumn(oColumn);
+
+        //Define the columns and the control templates to be used
+        var oColumn = new sap.ui.table.Column({
+        	label: new sap.ui.commons.Label({text: "Date"}),
+        	template: new sap.ui.commons.TextView().bindProperty("text", "INVDATE"),
+        	sortProperty: "INVDATE",
+        	filterProperty: "INVDATE",
+        	width: "100px"
+        });
+        oTable.addColumn(oColumn);
+        
+        //Create a model and bind the table rows to this model
+        var oModel = new sap.ui.model.json.JSONModel();
+        oModel.setData({modelData: aData});
+        oTable.setModel(oModel);
+        oTable.bindRows("/modelData");
+
+        //Initially sort the table
+        oTable.sort(oTable.getColumns()[2]);
+
+        //Bring the table onto the UI
+        oTable.placeAt("ctable");
+
+	</script>
+</head>
+<body>
+    <div id="ctable"></div>
+</body>
+</html>

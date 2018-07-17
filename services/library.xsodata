@@ -1,0 +1,3 @@
+service namespace "codejam_package.services" {
+	"codejam_package.data::mydata.Book" as "library";
+}
